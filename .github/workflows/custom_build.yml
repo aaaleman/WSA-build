@@ -2,52 +2,11 @@ name: Custom WSA Build
 
 on:
   workflow_dispatch:
-    inputs:
-      arch:
-        type: choice
-        description: Target CPU architecture of WSA
-        required: true
-        options: [x64, arm64]
-        default: x64
-      release_type:
-        type: choice
-        description: WSA Release Channel
-        required: true
-        options: ["Retail","Release Preview","Insider Slow","Insider Fast","Insider Private"]
-        default: "Retail"
-      gapps_brand:
-        type: choice
-        description: Google Apps brand
-        required: true
-        options: ["MindTheGapps v13.0","No GApps"]
-        default: "MindTheGapps v13.0"
-      root_sol:
-        type: choice
-        description: Root solution
-        required: true
-        options: ["Non-root","KernelSU","Magisk Official","Magisk Alpha (vvb2060)","Magisk Delta (HuskyDG)"]
-        default: "Magisk Official"
-      magisk_channel:
-        type: choice
-        description: Magisk channel
-        required: true
-        options: ["Magisk Stable","Magisk Beta","Magisk Canary","Magisk Debug"]
-        default: "Magisk Stable"
-      compression:
-        type: choice
-        description: Compression format
-        required: true
-        options: [".zip",".7z"]
-        default: ".7z"
-      remove_amazon:
-        type: boolean
-        description: Remove Amazon Appstore from the system
-        required: true
-        default: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -62,16 +21,24 @@ jobs:
 
       - name: Run WSA build script
         run: |
-          echo "Running WSA build for ${{ github.event.inputs.arch }}..."
-          # Example build command (replace this with the real one)
+          echo "Starting real WSA build for x64..."
+
           mkdir -p output
-          touch output/WSA_test_build.7z  # Simulates your final output
+
+          ./scripts/build_with_lspinit.sh \
+            --arch x64 \
+            --release-type retail \
+            --root-sol magisk \
+            --magisk-branch topjohnwu \
+            --magisk-ver stable \
+            --install-gapps \
+            --remove-amazon
 
       - name: List output folder (debug)
         run: ls -lh output
 
       - name: Upload build artifact
-        uses: uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: WSA_Build
           path: output/*.7z
