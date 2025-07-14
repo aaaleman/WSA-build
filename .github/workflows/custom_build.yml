@@ -62,10 +62,13 @@ jobs:
 
       - name: Run WSA build script
         run: |
-          # Insert the actual build script commands here,
-          # for example calling build_with_lspinit.sh or build_with_mount.sh
-          echo "Running build for ${{ github.event.inputs.arch }} architecture..."
-          # You will replace this with your real commands
+          echo "Running WSA build for ${{ github.event.inputs.arch }}..."
+          # Example build command (replace this with the real one)
+          mkdir -p output
+          touch output/WSA_test_build.7z  # Simulates your final output
+
+      - name: List output folder (debug)
+        run: ls -lh output
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
