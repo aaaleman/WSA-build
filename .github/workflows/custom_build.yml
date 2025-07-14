@@ -71,7 +71,7 @@ jobs:
         run: ls -lh output
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: uses: actions/upload-artifact@v4
         with:
           name: WSA_Build
           path: output/*.7z
